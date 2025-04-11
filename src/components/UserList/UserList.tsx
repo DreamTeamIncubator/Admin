@@ -1,24 +1,21 @@
-import {GET_USERS} from '@/apollo/graphQL.ts';
-import {useQuery} from '@apollo/client';
-import {ChangeEvent, useState} from 'react';
-import {Input} from '@/components/Input/Input.tsx';
-import {RadixSelect} from '@/components/Select/RadixSelect.tsx';
-import s from './UserList.module.scss';
-import {Pagination} from '@/components/Pagination/Pagination.tsx';
+import {GET_USERS, REMOVE_USER} from '@/apollo/graphQL.ts'
+import {useMutation, useQuery} from '@apollo/client'
+import {ChangeEvent, useState} from 'react'
+import {Input} from '@/components/Input/Input.tsx'
+import {RadixSelect} from '@/components/Select/RadixSelect.tsx'
+import s from './UserList.module.scss'
+import {Pagination} from '@/components/Pagination/Pagination.tsx'
+import {useBoolean} from '@/common/hooks/useBoolean.ts';
+import {ModalRadix} from '@/components/Modal/ModalRadix.tsx';
+import {Button} from '@/components/Button/Button.tsx';
+import type {User} from '@/generated/graphql.ts';
+import UserListItem from '@/components/UserList/UserListItem/UserListItem.tsx';
 
 const selectOptions = [
-    { value: 'Blocked', label: 'Blocked' },
-    { value: 'Not Blocked', label: 'Not Blocked' },
+    {value: 'Blocked', label: 'Blocked'},
+    {value: 'Not Blocked', label: 'Not Blocked'},
 ]
 
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}.${month}.${year}`;
-};
 
 export const UserList = () => {
     const [inputValue, setInputValue] = useState('')
@@ -26,6 +23,10 @@ export const UserList = () => {
     const [page, setPage] = useState(1)
     const [perPage, setPerPage] = useState(5);
     const perPageOptions = [5, 10, 20, 50, 100]
+
+    const {value: isOpenModal, setTrue: setIsOpened, setFalse: setIsClosed} = useBoolean()
+    const [user, setUser] = useState<User | null>(null)
+    const {value: isDisabled, setTrue: setIsDisabled, setFalse: setIsNotDisabled} = useBoolean()
 
     const {data, refetch} = useQuery(GET_USERS, {
         variables: {
@@ -37,6 +38,8 @@ export const UserList = () => {
             statusFilter: 'ALL',
         }
     })
+
+    const [removeUser] = useMutation(REMOVE_USER);
 
     const totalCount = data?.getUsers?.totalCount || 0;
     const totalPages = Math.ceil(totalCount / perPage);
@@ -73,19 +76,24 @@ export const UserList = () => {
         // Добавить логику фильтрации
     }
 
-    const mappedUsers = data?.getUsers?.users?.map((el: any) => {
-        return (
-            <div className={s.user} key={el.id}>
-                <div className={s.userId}>{el.id}</div>
-                <div className={s.userName}>{el.userName}</div>
-                <div className={s.profileLink}>{el.profile.userName}</div>
-                <div className={s.dateAdded}>{formatDate(el.profile.createdAt)}</div>
-                <div className={s.dots} onClick={()=>{}}>
-                    <span></span>
-                </div>
-            </div>
-        )
-    })
+    const openDeleteModal = async (userId: number) => {
+        const userToDelete = data?.getUsers?.users?.find((user: User) => user.id === userId);
+        await setUser(userToDelete);
+        setIsOpened()
+    }
+
+    const deleteHandler = async () =>  {
+        try {
+            setIsDisabled()
+            await removeUser({variables: {userId: user?.id}})
+            setIsClosed()
+            setIsNotDisabled()
+            refetch();
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
 
     return (
         <div className={s.userListWrapper}>
@@ -110,7 +118,7 @@ export const UserList = () => {
             </div>
 
             <div className={s.userList}>
-                {mappedUsers}
+                {data?.getUsers?.users?.map((user: User) =>  <UserListItem user={user} onDelete = {openDeleteModal} key={user.id}/>)}
             </div>
 
             <Pagination
@@ -121,6 +129,15 @@ export const UserList = () => {
                 perPageOptions={perPageOptions}
                 onPerPageChange={handlePerPageChange}
             />
+            <ModalRadix open={isOpenModal} onClose={setIsClosed} modalTitle={'Delete user'} size={'sm'} className={s.modal}>
+                <div>Are you sure to delete user {user?.userName}?</div>
+                <div className={s.buttonContainer} >
+                    <Button variant={'primary'} onClick={setIsClosed}>No</Button>
+                    <Button variant={'outlined'} onClick={deleteHandler} disabled={isDisabled}>Yes</Button>
+                </div>
+            </ModalRadix>
         </div>
     )
 }
+
+

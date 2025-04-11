@@ -35,3 +35,9 @@ export const GET_USERS = gql`
     }
   }
 `
+
+export const REMOVE_USER = gql`
+    mutation removeUser($userId: Int!){
+        removeUser(userId: $userId)
+    }
+`
