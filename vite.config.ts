@@ -13,4 +13,15 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  //add proxy server
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://inctagram.work',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+        secure: false,
+      },
+    },
+  },
 });
