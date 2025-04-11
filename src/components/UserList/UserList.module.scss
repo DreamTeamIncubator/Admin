@@ -1,0 +1,110 @@
+.userListWrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 60px 60px 48px 10px;
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: space-between;
+
+  & input {
+    min-width: 644px;
+    margin-bottom: 24px;
+  }
+}
+
+.userList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--dark-500);
+}
+
+.headerContainer {
+  background-color: var(--dark-500);
+  padding: 12px 24px;
+  display: flex;
+  text-align: left;
+
+  & div:first-child {
+    min-width: 134px;
+    margin-right: 54px;
+  }
+  & div:nth-child(2) {
+    min-width: 130px;
+    margin-right: 83px;
+  }
+  & div:nth-child(3) {
+    min-width: 130px;
+    margin-right: 131px;
+  }
+  & div:nth-child(4) {
+    min-width: 80px;
+    margin-right: 161px;
+  }
+}
+
+.user {
+  display: flex;
+  padding: 12px 24px;
+
+  & div {
+    text-align: left;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--dark-500);
+  }
+}
+
+.userName {
+  min-width: 160px;
+  margin-right: 53px;
+}
+
+.userId {
+  min-width: 134px;
+  margin-right: 54px;
+}
+
+.profileLink {
+  min-width: 160px;
+  margin-right: 101px;
+}
+
+.dateAdded {
+  min-width: 100px;
+  margin-right: 141px;
+}
+
+.dots {
+  margin-left: auto;
+
+  & span {
+    position: relative;
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--light-100);
+
+    &:before,
+    &:after {
+      position: absolute;
+      content: '';
+      width: 4px;
+      left: -6px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: var(--light-100);
+    }
+
+    &:before {
+      left: -6px;
+    }
+
+    &:after {
+      left: -12px;
+    }
+  }
+}

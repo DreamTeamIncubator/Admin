@@ -1,0 +1,115 @@
+.root {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.container {
+  display: flex;
+  gap: 12px;
+  list-style-type: none;
+}
+
+@mixin item {
+  all: unset;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+
+  font-size: 11px;
+  color: var(--light-100);
+
+  border-radius: 2px;
+}
+
+.item {
+  font-size: 11px;
+  @include item;
+
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-700);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: initial;
+    opacity: 1;
+  }
+
+  &:hover:not(&:disabled) {
+    background-color: var(--dark-500);
+  }
+
+  &.selected {
+    color: var(--dark-900);
+    background-color: var(--light-100);
+  }
+}
+
+.dots {
+  @include item;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-700);
+    outline-offset: 2px;
+  }
+}
+
+.icon {
+  .item:disabled & {
+    // important because icons have style prop
+    color: var(--dark-100) !important;
+  }
+}
+
+.selectBox {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.selectBox .paginationSelect {
+  box-sizing: border-box;
+  width: 52px;
+  padding: 0 2px;
+  font-size: 14px;
+  justify-content: flex-end;
+  gap: 2px;
+  background-color: var(--dark-500);
+  border: 1px solid var(--dark-300);
+  border-radius: 2px;
+
+  &:hover,
+  &:active {
+    border: 1px solid var(--dark-300);
+  }
+
+  & span {
+    width: 16px;
+    height: 16px;
+    margin-right: 1px;
+    border: none;
+
+    &:hover,
+    &:active {
+      border: none;
+    }
+  }
+}
+
+.customDropdown[data-state="open"] {
+  background-color: var(--dark-500);
+  border: 1px solid var(--dark-300);
+  border-radius: 2px;
+}

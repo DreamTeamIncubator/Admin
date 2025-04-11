@@ -70,7 +70,6 @@ export const RadixSelect = ({
             <Select.Viewport className={clsx(s.viewport, className)}>
               <Select.Group>
                 {options
-                  .filter(option => option.value !== value)
                   .map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {renderItem ? renderItem(option) : option.label}
