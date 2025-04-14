@@ -1,6 +1,7 @@
 import s from './Header.module.scss'
 import {Button} from '../Button/Button.tsx';
 import {LanguageSelect} from '../Select/LanguageSelect/LanguageSelect.tsx';
+import { Link } from 'react-router-dom';
 
 
 
@@ -25,11 +26,11 @@ export const Header = () => {
           <LanguageSelect />
           {/*{data ? null : (*/}
             <div>
-              <a href="/auth/login">
+              <Link to="/login">
                 <Button variant={'textButton'} className={s.btn}>
                   Log in
                 </Button>
-              </a>
+              </Link>
                 {/*onClick={SignUpForm}*/}
               <Button variant={'primary'} className={s.btn} >
                 Sign up

@@ -10,7 +10,7 @@ type Props = ComponentPropsWithoutRef<'input'> & {
   showIcon?: boolean
   onIconClick?: () => void
   value?: string
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 export const Input = ({
