@@ -1,0 +1,23 @@
+.mainlayout {
+  height: 100vh;
+  display: flex;
+  gap: 12px
+}
+
+.navigation {
+  padding: 70px 30px 30px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: start;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 12px
+}
+
+.active {
+  color: var(--accent-500, #397DF6);
+}

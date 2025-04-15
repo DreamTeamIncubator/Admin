@@ -10,6 +10,7 @@ import {ModalRadix} from '@/components/Modal/ModalRadix.tsx';
 import {Button} from '@/components/Button/Button.tsx';
 import type {User} from '@/generated/graphql.ts';
 import UserListItem from '@/components/UserList/UserListItem/UserListItem.tsx';
+import {useDebounce} from '@/common/hooks/useDebounce.ts';
 
 const selectOptions = [
     {value: 'Blocked', label: 'Blocked'},
@@ -28,6 +29,7 @@ export const UserList = () => {
     const [user, setUser] = useState<User | null>(null)
     const {value: isDisabled, setTrue: setIsDisabled, setFalse: setIsNotDisabled} = useBoolean()
 
+
     const {data, refetch} = useQuery(GET_USERS, {
         variables: {
             searchTerm: inputValue,
@@ -38,6 +40,15 @@ export const UserList = () => {
             statusFilter: 'ALL',
         }
     })
+
+    //debounce
+    const debouncedSearch = useDebounce((value: string) => {
+        refetch({
+            searchTerm: value,
+            pageNumber: 1,
+            pageSize: perPage
+        })
+    }, 3000)
 
     const [removeUser] = useMutation(REMOVE_USER);
 
@@ -64,11 +75,13 @@ export const UserList = () => {
     const onChangeInputHandler = (value: string) => {
         setInputValue(value)
         setPage(1)
-        refetch({
-            searchTerm: value,
-            pageNumber: 1,
-            pageSize: perPage
-        })
+
+        debouncedSearch(value)
+        // refetch({
+        //     searchTerm: value,
+        //     pageNumber: 1,
+        //     pageSize: perPage
+        // })
     }
 
     const onChangeSelectHandler = (value: any) => {
