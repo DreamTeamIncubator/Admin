@@ -41,3 +41,39 @@ export const REMOVE_USER = gql`
         removeUser(userId: $userId)
     }
 `
+
+export const GET_PAYMENTS = gql`
+  query getPayments(
+    $searchTerm: String
+    $pageSize: Int
+    $pageNumber: Int
+    $sortBy: String
+    $sortDirection: SortDirection
+  ) {
+    getPayments(
+      searchTerm: $searchTerm
+      pageSize: $pageSize
+      pageNumber: $pageNumber
+      sortBy: $sortBy
+      sortDirection: $sortDirection
+    ) {
+      items {
+        amount
+        avatars {
+          url
+        }
+        createdAt
+        currency
+        id
+        paymentMethod
+        type
+        userId
+        userName
+      }
+      page
+      pageSize
+      pagesCount
+      totalCount
+    }
+  }
+`
