@@ -1,4 +1,3 @@
-
 import {Login} from '@/components/Login/Login';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import MainLayout from '@/widgets/MainLayout/ui/MainLayout.tsx';
@@ -7,6 +6,7 @@ import {Statistics} from '@/features/Statistics/Statistics.tsx';
 import {PaymentsList} from '@/features/PaymentsList/PaymentsList.tsx';
 import {PostsList} from '@/features/PostsList/PostsList.tsx';
 import {RequireAuth} from '@/widgets/MainLayout/ui/RequireAuth.tsx';
+
 
 const AppRouter = () => {
     return (
@@ -18,7 +18,6 @@ const AppRouter = () => {
                 <Route path="statistics" element={<Statistics />} />
                 <Route path="payments-list" element={<PaymentsList />} />
                 <Route path="posts-list" element={<PostsList />} />
-                 <Route path="/moreInformation/:id" element={<MoreInformation />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
