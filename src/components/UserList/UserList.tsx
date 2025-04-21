@@ -1,22 +1,21 @@
-import {GET_USERS, REMOVE_USER} from '@/apollo/graphQL.ts'
-import {useMutation, useQuery} from '@apollo/client'
-import {ChangeEvent, useState} from 'react'
-import {Input} from '@/components/Input/Input.tsx'
-import {RadixSelect} from '@/components/Select/RadixSelect.tsx'
-import s from './UserList.module.scss'
-import {Pagination} from '@/components/Pagination/Pagination.tsx'
-import {useBoolean} from '@/common/hooks/useBoolean.ts';
-import {ModalRadix} from '@/components/Modal/ModalRadix.tsx';
-import {Button} from '@/components/Button/Button.tsx';
-import type {User} from '@/generated/graphql.ts';
+import { GET_USERS, REMOVE_USER } from '@/apollo/graphQL.ts';
+import { useMutation, useQuery } from '@apollo/client';
+import { ChangeEvent, useState } from 'react';
+import { Input } from '@/components/Input/Input.tsx';
+import { RadixSelect } from '@/components/Select/RadixSelect.tsx';
+import s from './UserList.module.scss';
+import { Pagination } from '@/components/Pagination/Pagination.tsx';
+import { useBoolean } from '@/common/hooks/useBoolean.ts';
+import { ModalRadix } from '@/components/Modal/ModalRadix.tsx';
+import { Button } from '@/components/Button/Button.tsx';
+import type { User } from '@/generated/graphql.ts';
 import UserListItem from '@/components/UserList/UserListItem/UserListItem.tsx';
 import {useDebounce} from '@/common/hooks/useDebounce.ts';
 
 const selectOptions = [
-    {value: 'Blocked', label: 'Blocked'},
-    {value: 'Not Blocked', label: 'Not Blocked'},
-]
-
+  { value: 'Blocked', label: 'Blocked' },
+  { value: 'Not Blocked', label: 'Not Blocked' },
+];
 
 export const UserList = () => {
     const [inputValue, setInputValue] = useState('')
@@ -94,63 +93,55 @@ export const UserList = () => {
         await setUser(userToDelete);
         setIsOpened()
     }
+  };
 
-    const deleteHandler = async () =>  {
-        try {
-            setIsDisabled()
-            await removeUser({variables: {userId: user?.id}})
-            setIsClosed()
-            setIsNotDisabled()
-            refetch();
-        } catch (e) {
-            console.log(e)
-        }
-    }
+  return (
+    <div className={s.userListWrapper}>
+      <div className={s.inputContainer}>
+        <Input
+          value={inputValue}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeInputHandler(e.currentTarget.value)}
+          placeholder={'Search'}
+        />
+        <RadixSelect
+          options={selectOptions}
+          value={selectValue.value}
+          onValueChange={(value) => onChangeSelectHandler(value)}
+        />
+      </div>
+      <div className={s.headerContainer}>
+        <div>User ID</div>
+        <div>Username</div>
+        <div>Profile link</div>
+        <div>Date added</div>
+        <div>Actions</div>
+      </div>
 
+      <div className={s.userList}>
+        {data?.getUsers?.users?.map((user: User) => (
+          <UserListItem user={user} onDelete={openDeleteModal} key={user.id} />
+        ))}
+      </div>
 
-    return (
-        <div className={s.userListWrapper}>
-            <div className={s.inputContainer}>
-                <Input
-                    value={inputValue}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeInputHandler(e.currentTarget.value)}
-                    placeholder={'Search'}
-                />
-                <RadixSelect
-                    options={selectOptions}
-                    value={selectValue.value}
-                    onValueChange={(value) => onChangeSelectHandler(value)}
-                />
-            </div>
-            <div className={s.headerContainer}>
-                <div>User ID</div>
-                <div>Username</div>
-                <div>Profile link</div>
-                <div>Date added</div>
-                <div>Actions</div>
-            </div>
-
-            <div className={s.userList}>
-                {data?.getUsers?.users?.map((user: User) =>  <UserListItem user={user} onDelete = {openDeleteModal} key={user.id}/>)}
-            </div>
-
-            <Pagination
-                count={totalPages || 1}
-                onChange={handlePageChange}
-                page={page}
-                perPage={perPage}
-                perPageOptions={perPageOptions}
-                onPerPageChange={handlePerPageChange}
-            />
-            <ModalRadix open={isOpenModal} onClose={setIsClosed} modalTitle={'Delete user'} size={'sm'} className={s.modal}>
-                <div>Are you sure to delete user {user?.userName}?</div>
-                <div className={s.buttonContainer} >
-                    <Button variant={'primary'} onClick={setIsClosed}>No</Button>
-                    <Button variant={'outlined'} onClick={deleteHandler} disabled={isDisabled}>Yes</Button>
-                </div>
-            </ModalRadix>
+      <Pagination
+        count={totalPages || 1}
+        onChange={handlePageChange}
+        page={page}
+        perPage={perPage}
+        perPageOptions={perPageOptions}
+        onPerPageChange={handlePerPageChange}
+      />
+      <ModalRadix open={isOpenModal} onClose={setIsClosed} modalTitle={'Delete user'} size={'sm'} className={s.modal}>
+        <div>Are you sure to delete user {user?.userName}?</div>
+        <div className={s.buttonContainer}>
+          <Button variant={'primary'} onClick={setIsClosed}>
+            No
+          </Button>
+          <Button variant={'outlined'} onClick={deleteHandler} disabled={isDisabled}>
+            Yes
+          </Button>
         </div>
-    )
-}
-
-
+      </ModalRadix>
+    </div>
+  );
+};

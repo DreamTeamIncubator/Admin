@@ -1,0 +1,16 @@
+.sidebar {
+  display: flex;
+  width: 220px;
+  height: 100vh;
+  border-right: 1px solid var(--dark-300);
+}
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 72px 60px 0 60px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 171%;
+  text-align: start;
+}
