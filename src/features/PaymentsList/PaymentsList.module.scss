@@ -1,0 +1,49 @@
+
+.input{
+    width:1040px;
+}
+
+.iconFilterWrapper{
+    display: flex;
+    align-items: center;
+    gap:4px;
+}
+
+
+.headerContainer {
+    display: grid;
+    grid-template-columns: 200px 220px 210px 200px 160px;
+    padding: 12px; 
+    background-color: #1a1a1a;
+    text-align: left;
+  }
+  
+  .user {
+    display: grid;
+    grid-template-columns: 200px 220px 205px 200px 160px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+}
+  
+.text{
+    color: var(--Light-100, #FFF);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px; 
+}
+
+.userAvatarContainer{
+    display: flex;
+    flex:1; 
+    flex-direction: row;
+    gap:12px;
+    align-items: center;
+}
+
+.avatar{
+    width:36px;
+    height:36px;
+    border-radius: 50%;
+}
+

@@ -10,6 +10,7 @@ import { ModalRadix } from '@/components/Modal/ModalRadix.tsx';
 import { Button } from '@/components/Button/Button.tsx';
 import type { User } from '@/generated/graphql.ts';
 import UserListItem from '@/components/UserList/UserListItem/UserListItem.tsx';
+import {useDebounce} from '@/common/hooks/useDebounce.ts';
 
 const selectOptions = [
   { value: 'Blocked', label: 'Blocked' },
@@ -17,79 +18,80 @@ const selectOptions = [
 ];
 
 export const UserList = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [selectValue, setSelectValue] = useState(selectOptions[1]);
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(5);
-  const perPageOptions = [5, 10, 20, 50, 100];
+    const [inputValue, setInputValue] = useState('')
+    const [selectValue, setSelectValue] = useState(selectOptions[1])
+    const [page, setPage] = useState(1)
+    const [perPage, setPerPage] = useState(5);
+    const perPageOptions = [5, 10, 20, 50, 100]
 
-  const { value: isOpenModal, setTrue: setIsOpened, setFalse: setIsClosed } = useBoolean();
-  const [user, setUser] = useState<User | null>(null);
-  const { value: isDisabled, setTrue: setIsDisabled, setFalse: setIsNotDisabled } = useBoolean();
+    const {value: isOpenModal, setTrue: setIsOpened, setFalse: setIsClosed} = useBoolean()
+    const [user, setUser] = useState<User | null>(null)
+    const {value: isDisabled, setTrue: setIsDisabled, setFalse: setIsNotDisabled} = useBoolean()
 
-  const { data, refetch } = useQuery(GET_USERS, {
-    variables: {
-      searchTerm: inputValue,
-      pageSize: perPage,
-      pageNumber: page,
-      sortBy: 'createdAt',
-      sortDirection: 'desc',
-      statusFilter: 'ALL',
-    },
-  });
 
-  const [removeUser] = useMutation(REMOVE_USER);
+    const {data, refetch} = useQuery(GET_USERS, {
+        variables: {
+            searchTerm: inputValue,
+            pageSize: perPage,
+            pageNumber: page,
+            sortBy: 'createdAt',
+            sortDirection: 'desc',
+            statusFilter: 'ALL',
+        }
+    })
 
-  const totalCount = data?.getUsers?.totalCount || 0;
-  const totalPages = Math.ceil(totalCount / perPage);
+    //debounce
+    const debouncedSearch = useDebounce((value: string) => {
+        refetch({
+            searchTerm: value,
+            pageNumber: 1,
+            pageSize: perPage
+        })
+    }, 3000)
 
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
-    refetch({
-      pageNumber: newPage,
-      pageSize: perPage,
-    });
-  };
+    const [removeUser] = useMutation(REMOVE_USER);
 
-  const handlePerPageChange = (newPerPage: number) => {
-    setPerPage(newPerPage);
-    setPage(1);
-    refetch({
-      pageNumber: 1,
-      pageSize: newPerPage,
-    });
-  };
+    const totalCount = data?.getUsers?.totalCount || 0;
+    const totalPages = Math.ceil(totalCount / perPage);
 
-  const onChangeInputHandler = (value: string) => {
-    setInputValue(value);
-    setPage(1);
-    refetch({
-      searchTerm: value,
-      pageNumber: 1,
-      pageSize: perPage,
-    });
-  };
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage)
+        refetch({
+            pageNumber: newPage,
+            pageSize: perPage
+        })
+    }
 
-  const onChangeSelectHandler = (value: any) => {
-    setSelectValue(value);
-    // Добавить логику фильтрации
-  };
+    const handlePerPageChange = (newPerPage: number) => {
+        setPerPage(newPerPage)
+        setPage(1)
+        refetch({
+            pageNumber: 1,
+            pageSize: newPerPage
+        })
+    }
 
-  const openDeleteModal = async (userId: number) => {
-    const userToDelete = data?.getUsers?.users?.find((user: User) => user.id === userId);
-    await setUser(userToDelete);
-    setIsOpened();
-  };
+    const onChangeInputHandler = (value: string) => {
+        setInputValue(value)
+        setPage(1)
 
-  const deleteHandler = async () => {
-    try {
-      setIsDisabled();
-      await removeUser({ variables: { userId: user?.id } });
-      setIsClosed();
-      setIsNotDisabled();
-      refetch();
-    } catch (e) {
-      console.log(e);
+        debouncedSearch(value)
+        // refetch({
+        //     searchTerm: value,
+        //     pageNumber: 1,
+        //     pageSize: perPage
+        // })
+    }
+
+    const onChangeSelectHandler = (value: any) => {
+        setSelectValue(value)
+        // Добавить логику фильтрации
+    }
+
+    const openDeleteModal = async (userId: number) => {
+        const userToDelete = data?.getUsers?.users?.find((user: User) => user.id === userId);
+        await setUser(userToDelete);
+        setIsOpened()
     }
   };
 
