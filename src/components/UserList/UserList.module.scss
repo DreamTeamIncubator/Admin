@@ -51,9 +51,69 @@
     margin-right: 131px;
   }
   & div:nth-child(4) {
-    min-width: 80px;
-    margin-right: 161px;
+    width: max-content;
+    margin-right: 131px;
   }
+}
+
+.user {
+  display: flex;
+  padding: 12px 24px;
+
+  & div {
+    text-align: left;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--dark-500);
+  }
+}
+
+.userName {
+  min-width: 160px;
+  margin-right: 53px;
+}
+
+.userId {
+  min-width: 134px;
+  margin-right: 54px;
+}
+
+.profileLink {
+  min-width: 160px;
+  margin-right: 101px;
+}
+
+.dateAdded {
+  min-width: 100px;
+  margin-right: 141px;
+}
+
+.dotsIcon {
+  padding: 5px;
+  cursor: pointer;
+  position: relative;
+}
+
+.popoverContainer {
+  border-radius: 2px;
+  border: 1px solid var(--dark-100, #4c4c4c);
+  background: var(--dark-500, #171717);
+  padding: 12px;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 2;
+}
+
+.popoverItem {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  cursor: pointer;
 }
 
 .buttonContainer {
