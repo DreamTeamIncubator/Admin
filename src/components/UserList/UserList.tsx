@@ -28,7 +28,7 @@ export const UserList = () => {
   const { value: isOpenModal, setTrue: setIsOpened, setFalse: setIsClosed } = useBoolean()
   const [user, setUser] = useState<User | null>(null)
   const { value: isDisabled, setTrue: setIsDisabled, setFalse: setIsNotDisabled } = useBoolean()
-
+  ///test
   const { data, refetch, variables } = useQuery(GET_USERS, {
     variables: {
       searchTerm: inputValue,
