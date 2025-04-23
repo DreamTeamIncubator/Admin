@@ -67,6 +67,12 @@ export const BAN_USER = gql`
     }
 `;
 
+export const UNBAN_USER = gql`
+    mutation unbanUser($userId: Int!){
+        unbanUser(userId: $userId)
+    }
+`;
+
 export const GET_POSTS_BY_USER = gql`
   query getPostsByUser($userId: Int!, $endCursorId: Int!) {
     getPostsByUser(userId: $userId, endCursorId: $endCursorId) {
