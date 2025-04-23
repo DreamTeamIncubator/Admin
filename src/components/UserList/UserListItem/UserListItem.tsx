@@ -9,6 +9,8 @@ import {useState} from 'react';
 import {BanReasonForm} from '@/components/UserList/ActionModal/BanReasonForm/BanReasonForm.tsx';
 import {ActionModal} from '@/components/UserList/ActionModal/ActionModal.tsx';
 import { useNavigate } from 'react-router-dom';
+import {UNBAN_USER} from '@/apollo/graphQL.ts';
+import {useMutation} from '@apollo/client';
 
 export const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -20,14 +22,17 @@ type Props = {
     onDelete: (userId: number) => Promise<void>
     onBan: (userId: number, reason: string) => Promise<void>
     isBanned?: UserBan | null
+    refetch: () => void
 };
 
-export const UserListItem = ({user, onDelete, onBan, isBanned}: Props) => {
-    const [activeModal, setActiveModal] = useState<'delete' | 'ban' | null>(null);
+export const UserListItem = ({user, onDelete, onBan, isBanned, refetch}: Props) => {
+    const [activeModal, setActiveModal] = useState<'delete' | 'ban' | 'unban' | null>(null);
     const [banReason, setBanReason] = useState('');
     const [customBanReason, setCustomBanReason] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
+    const [unban] = useMutation(UNBAN_USER)
 
     const route = useNavigate();
     const handleMoreInformation = (id: number) => {
@@ -45,7 +50,7 @@ export const UserListItem = ({user, onDelete, onBan, isBanned}: Props) => {
         setErrorMessage('')
     }
 
-    const handleActionConfirm = async (actionType: 'delete' | 'ban') => {
+    const handleActionConfirm = async (actionType: 'delete' | 'ban' | 'unban') => {
         if (actionType === 'ban' && (!banReason || (banReason === 'Another reason' && !customBanReason))) {
             setErrorMessage('Please select or enter a ban reason.');
             return;
@@ -60,6 +65,13 @@ export const UserListItem = ({user, onDelete, onBan, isBanned}: Props) => {
             } else if (actionType === 'ban') {
                 const reason = banReason === 'Another reason' ? customBanReason : banReason;
                 await onBan(user.id, reason);
+            } else if (actionType === 'unban') {
+                await  unban({
+                    variables: {
+                        userId: user.id
+                    }
+                })
+                refetch()
             }
             setActiveModal(null);
         } finally {
@@ -91,7 +103,13 @@ export const UserListItem = ({user, onDelete, onBan, isBanned}: Props) => {
                 </>
 
             ),
-        }
+        },
+        unban: {
+            title: 'Un-ban user',
+            description: (
+                <p>Are you sure to un-ban user <b>{user.userName}</b>?</p>
+            )
+        },
     };
 
     return (
@@ -113,7 +131,7 @@ export const UserListItem = ({user, onDelete, onBan, isBanned}: Props) => {
                             <img src={deleteIcon} alt="Delete"/>
                             <span>Delete User</span>
                         </div>
-                        <div className={s.popoverItem} onClick={() => setActiveModal('ban')}>
+                        <div className={s.popoverItem} onClick={() => isBanned ? setActiveModal('unban') : setActiveModal('ban')}>
                             <img src={isBanned ? unbanIcon : banIcon} alt="Ban"/>
                             <span>{isBanned ? 'Un-ban' : 'Ban'} User</span>
                         </div>

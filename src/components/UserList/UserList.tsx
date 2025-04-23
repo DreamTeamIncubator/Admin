@@ -55,6 +55,7 @@ export const UserList = () => {
     const onDeleteHandler = useCallback(async (userId: number) => {
         try {
             await removeUser({variables: {userId}});
+            await removeUser({variables: {userId}});
         } catch (e) {
             console.error(e);
         }
@@ -149,6 +150,7 @@ export const UserList = () => {
                         onDelete={onDeleteHandler}
                         onBan={onBanHandler}
                         isBanned={user.userBan}
+                        refetch ={refetch}
                     />
                 ))}
             </div>
