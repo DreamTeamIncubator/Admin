@@ -3,8 +3,6 @@ import {Button} from '../Button/Button.tsx';
 import {LanguageSelect} from '../Select/LanguageSelect/LanguageSelect.tsx';
 import { Link } from 'react-router-dom';
 
-
-
 // import { LanguageSelect } from '@/shared/ui/Select/LanguageSelect/LanguageSelect'
 // import { useGetMeQuery } from '@/features/auth/api/auth'
 

@@ -8,6 +8,12 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [react()],
+  css: {
+    modules: {
+      localsConvention: 'camelCase', // или 'dashes'
+      generateScopedName: '[local]___[hash:base64:5]', // явное именование
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

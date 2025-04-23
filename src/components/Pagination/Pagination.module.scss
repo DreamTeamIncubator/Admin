@@ -81,8 +81,7 @@
 
 .selectBox .paginationSelect {
   box-sizing: border-box;
-  width: 52px;
-  padding: 0 2px;
+  padding: 0 0 0 7px;
   font-size: 14px;
   justify-content: flex-end;
   gap: 2px;
@@ -96,8 +95,6 @@
   }
 
   & span {
-    width: 16px;
-    height: 16px;
     margin-right: 1px;
     border: none;
 

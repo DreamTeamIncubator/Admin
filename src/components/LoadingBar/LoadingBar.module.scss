@@ -1,0 +1,24 @@
+.progressRoot {
+    position: absolute;
+    height: 4px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.progressIndicator {
+    background-color: var(--accent-500);
+    height: 100%;
+    width: 0%;
+    animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}

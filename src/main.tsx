@@ -1,17 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import {createRoot} from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import {ApolloProvider} from '@apollo/client';
 import client from '@/apollo/apolloClient.ts';
-import { BrowserRouter } from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-      <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
         <BrowserRouter>
-          <App/>
+            <App/>
         </BrowserRouter>
-      </ApolloProvider>
-  </StrictMode>,
+    </ApolloProvider>
 )

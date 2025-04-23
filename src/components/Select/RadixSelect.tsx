@@ -6,29 +6,33 @@ import { SelectItem } from './SelectItem';
 import clsx from 'clsx';
 
 type Option = {
-  value: string;
-  label: string;
-  icon?: string;
+  value: string
+  label: string
+  icon?: string
 };
 
 type Props = {
-  className?: string;
+  className?: string
+  itemClassName?: string
   contentClassName?: string
-  options: Option[];
+  triggerClassName?: string
+  options: Option[]
   value?: string;
   id?: string
-  onValueChange: (value: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  showPlaceholderLabel?: boolean;
-  placeholderLabel?: string;
-  renderItem?: (option: Option) => React.ReactNode;
-  renderValue?: (option: Option) => React.ReactNode; 
+  onValueChange: (value: string) => void
+  placeholder?: string
+  disabled?: boolean
+  showPlaceholderLabel?: boolean
+  placeholderLabel?: string
+  renderItem?: (option: Option) => React.ReactNode
+  renderValue?: (option: Option) => React.ReactNode
 } & ComponentPropsWithoutRef<typeof Select.Root>;
 
 export const RadixSelect = ({
   className,
+  itemClassName,
   contentClassName,
+  triggerClassName,
   placeholder,
   value,
   options,
@@ -55,7 +59,7 @@ export const RadixSelect = ({
         open={open}
         onOpenChange={setOpen}
         {...rest}>
-        <Select.Trigger className={clsx(s.selectTrigger, { [s.open]: open }, className)} aria-label="Select">
+        <Select.Trigger className={clsx(s.selectTrigger, { [s.open]: open }, className, triggerClassName)} aria-label="Select">
           {selectedOption ? (
             renderValue ? renderValue(selectedOption) : selectedOption.label
           ) : (
@@ -71,7 +75,7 @@ export const RadixSelect = ({
               <Select.Group>
                 {options
                   .map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
+                    <SelectItem key={option.value} value={option.value} className={clsx(s.item, itemClassName)}>
                       {renderItem ? renderItem(option) : option.label}
                     </SelectItem>
                   ))}

@@ -23,6 +23,10 @@ export const GET_USERS = gql`
       users {
         id
         userName
+        userBan {
+          reason    
+          createdAt  
+        }
         profile {
             userName
             createdAt
@@ -39,5 +43,10 @@ export const GET_USERS = gql`
 export const REMOVE_USER = gql`
     mutation removeUser($userId: Int!){
         removeUser(userId: $userId)
+    }
+`
+export const BAN_USER = gql`
+    mutation banUser($banReason: String!, $userId: Int!){
+        banUser(banReason: $banReason, userId: $userId)
     }
 `

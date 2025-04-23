@@ -3,48 +3,57 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 4px;
-  border: 1px solid var(--Dark-100, #4C4C4C); 
-  padding: 0 15px;
-  font-size: 13px;
-  line-height: 1;
-  width: 210px;   
-  height: 36px;
-  gap: 5px; 
+  border-radius: 2px;
+  border: 1px solid var(--dark-100, #4C4C4C);
+  padding: 5px 15px;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 24px;
+  width: 100%;
+  min-height: 36px;
+  gap: 5px;
   color: var(--light-100, #ffffff);
+
   &:hover {
-      border: 1px solid var(--accent-500, #397DF6); 
+    border: 1px solid var(--accent-500, #397DF6);
 
   }
+
   &:disabled {
-      color: var(--Dark-100, #4C4C4C);
-      border-color: var(--Dark-100, #4C4C4C);
+    color: var(--Dark-100, #4C4C4C);
+    border-color: var(--dark-100, #4C4C4C);
   }
 
   &[data-placeholder] {
-      color: var(--light-100, #ffffff);
+    color: var(--light-100, #ffffff);
   }
 
   &[data-state="open"] {
-      background-color: var(--Dark-500, #171717);
+    background-color: var(--dark-500, #171717);
   }
 }
 
 .icon {
   color: var(--light-100, #ffffff);
+  height: 24px;
+
+  & svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .open {
-  border-color: var(--light-100, #ffffff); 
+  border-color: var(--light-100, #ffffff);
 }
 
 .selectContent {
   overflow: hidden;
   border-radius: 6px;
-  border: 1px solid var(--light-100, #ffffff);  
-  background-color: var(--Dark-500, #171717);
-  width: var(--radix-select-trigger-width); 
-	max-height: var(--radix-select-content-available-height);
+  border: 1px solid var(--light-100, #ffffff);
+  background-color: var(--dark-500, #171717);
+  width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
 }
 
 .viewport {
@@ -53,8 +62,9 @@
 }
 
 .item {
-  font-size: 13px;
-  line-height: 1;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
   color: var(--light-100, #ffffff);
   border-radius: 3px;
   display: flex;
@@ -63,22 +73,23 @@
   padding: 0 35px 0 25px;
   position: relative;
   user-select: none;
+
   &[data-disabled] {
-      color: var(--Dark-100, #4C4C4C); 
-      pointer-events: none;
+    color: var(--dark-100, #4C4C4C);
+    pointer-events: none;
   }
+
   &[data-highlighted] {
-      outline: none;
-      color: var(--accent-500, #397DF6); 
+    outline: none;
+    color: var(--accent-500, #397DF6);
   }
 }
 
 .placeholderLabel {
-  color: var(--Light-900, #8D9094);
-  font-family: Inter;
-  font-size: 14px;
+  color: var(--light-900, #8D9094);
+  font-size: 16px;
+  line-height: 24px;
   font-style: normal;
   font-weight: 400;
-  line-height: 24px; 
 }
 
