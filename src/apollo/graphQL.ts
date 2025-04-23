@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 
 export const GET_USER = gql`
   query getUser($userId: Int!) {
@@ -38,13 +38,13 @@ export const GET_USERS = gql`
       users {
         id
         userName
-        userBan {
-          reason    
-          createdAt  
-        }
         profile {
           userName
           createdAt
+        }
+        userBan {
+          reason    
+          createdAt  
         }
       }
       pagination {
@@ -59,6 +59,12 @@ export const REMOVE_USER = gql`
   mutation removeUser($userId: Int!) {
     removeUser(userId: $userId)
   }
+`;
+
+export const BAN_USER = gql`
+    mutation banUser($banReason: String!, $userId: Int!){
+        banUser(banReason: $banReason, userId: $userId)
+    }
 `;
 
 export const GET_POSTS_BY_USER = gql`
@@ -184,13 +190,4 @@ export const GET_PAYMENTS = gql`
       totalCount
     }
   }
-`;
-    mutation removeUser($userId: Int!){
-        removeUser(userId: $userId)
-    }
-`
-export const BAN_USER = gql`
-    mutation banUser($banReason: String!, $userId: Int!){
-        banUser(banReason: $banReason, userId: $userId)
-    }
 `

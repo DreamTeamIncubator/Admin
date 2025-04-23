@@ -1,4 +1,4 @@
-import s from '@/components/UserList/UserList.module.scss';
+import s from './UserListItem.module.scss'
 import * as Popover from '@radix-ui/react-popover';
 import dotsIcon from '@/assets/dotsIcon.svg';
 import deleteIcon from '@/assets/deleteUser.svg';
@@ -8,10 +8,9 @@ import unbanIcon from '../../../assets/unban.svg';
 import {useState} from 'react';
 import {BanReasonForm} from '@/components/UserList/ActionModal/BanReasonForm/BanReasonForm.tsx';
 import {ActionModal} from '@/components/UserList/ActionModal/ActionModal.tsx';
-import type { User } from '@/generated/graphql.ts';
 import { useNavigate } from 'react-router-dom';
 
-const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
 };
@@ -29,6 +28,11 @@ export const UserListItem = ({user, onDelete, onBan, isBanned}: Props) => {
     const [customBanReason, setCustomBanReason] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
+    const route = useNavigate();
+    const handleMoreInformation = (id: number) => {
+        route(`/moreInformation/${id}`);
+    };
 
     console.log('userListItem render')
 
@@ -113,8 +117,7 @@ export const UserListItem = ({user, onDelete, onBan, isBanned}: Props) => {
                             <img src={isBanned ? unbanIcon : banIcon} alt="Ban"/>
                             <span>{isBanned ? 'Un-ban' : 'Ban'} User</span>
                         </div>
-                        <div className={s.popoverItem} onClick={() => {
-                        }}>
+                        <div className={s.popoverItem} onClick={() => handleMoreInformation(user.id)}>
                             <img src={dotsIcon} alt={'banIcon'}/>
                             <span>More Information</span>
                         </div>
@@ -132,40 +135,41 @@ export const UserListItem = ({user, onDelete, onBan, isBanned}: Props) => {
                 />
             )}
         </div>
-    )
-const UserListItem = ({ user, onDelete }: Props) => {
-  const route = useNavigate();
-  const handleMoreInformation = (id: number) => {
-    route(`/moreInformation/${id}`);
-  };
-  return (
-    <div className={s.user} key={user.id}>
-      <div className={s.userId}>{user.id}</div>
-      <div className={s.userName}>{user.userName}</div>
-      <div className={s.profileLink}>{user.profile.userName}</div>
-      <div className={s.dateAdded}>{formatDate(user.profile.createdAt)}</div>
-      <div>
-        <Popover.Root>
-          <Popover.Trigger asChild>
-            <img src={dotsIcon} alt={'banIcon'} className={s.dotsIcon} />
-          </Popover.Trigger>
+    )}
 
-          <Popover.Content className={s.popoverContainer}>
-            <div className={s.popoverItem} onClick={() => onDelete(user.id)}>
-              <img src={deleteIcon} alt={'deleteIcon'} />
-              <span>Delete User</span>
-            </div>
-            <div className={s.popoverItem} onClick={() => {}}>
-              <img src={banIcon} alt={'banIcon'} />
-              <span>Ban in the system</span>
-            </div>
-            <div className={s.popoverItem} onClick={() => handleMoreInformation(user.id)}>
-              <img src={dotsIcon} alt={'banIcon'} />
-              <span>More Information</span>
-            </div>
-          </Popover.Content>
-        </Popover.Root>
-      </div>
-    </div>
-  );
-};
+// const _UserListItem = ({ user, onDelete }: Props) => {
+//   const route = useNavigate();
+//   const handleMoreInformation = (id: number) => {
+//     route(`/moreInformation/${id}`);
+//   };
+//   return (
+//     <div className={s.user} key={user.id}>
+//       <div className={s.userId}>{user.id}</div>
+//       <div className={s.userName}>{user.userName}</div>
+//       <div className={s.profileLink}>{user.profile.userName}</div>
+//       <div className={s.dateAdded}>{formatDate(user.profile.createdAt)}</div>
+//       <div>
+//         <Popover.Root>
+//           <Popover.Trigger asChild>
+//             <img src={dotsIcon} alt={'banIcon'} className={s.dotsIcon} />
+//           </Popover.Trigger>
+//
+//           <Popover.Content className={s.popoverContainer}>
+//             <div className={s.popoverItem} onClick={() => onDelete(user.id)}>
+//               <img src={deleteIcon} alt={'deleteIcon'} />
+//               <span>Delete User</span>
+//             </div>
+//             <div className={s.popoverItem} onClick={() => {}}>
+//               <img src={banIcon} alt={'banIcon'} />
+//               <span>Ban in the system</span>
+//             </div>
+//             <div className={s.popoverItem} onClick={() => handleMoreInformation(user.id)}>
+//               <img src={dotsIcon} alt={'banIcon'} />
+//               <span>More Information</span>
+//             </div>
+//           </Popover.Content>
+//         </Popover.Root>
+//       </div>
+//     </div>
+//   );
+// };

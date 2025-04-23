@@ -167,7 +167,7 @@
 
 
 // UserList.tsx
-import {GET_USERS, REMOVE_USER, BAN_USER} from '@/apollo/graphQL.ts';
+import {BAN_USER, GET_USERS, REMOVE_USER} from '@/apollo/graphQL.ts';
 import {useMutation, useQuery} from '@apollo/client';
 import {ChangeEvent, useCallback, useState} from 'react';
 import {Input} from '@/components/Input/Input.tsx';
