@@ -1,0 +1,90 @@
+.user {
+  display: flex;
+  padding: 12px 24px;
+  align-items: center;
+
+  & div {
+    text-align: left;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--dark-500);
+  }
+}
+
+.userName {
+  min-width: 160px;
+  margin-right: 53px;
+}
+
+.userId {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: right;
+  text-align: left;
+  min-width: 80px;
+  margin-right: 54px;
+
+  & img {
+    width: 24px;
+  }
+}
+
+.profileLink {
+  min-width: 160px;
+  margin-right: 101px;
+}
+
+.dateAdded {
+  min-width: 100px;
+  margin-right: 141px;
+}
+
+.dotsIcon {
+  padding: 5px;
+  cursor: pointer;
+  position: relative;
+}
+
+.popoverContainer {
+  border-radius: 2px;
+  border: 1px solid var(--dark-100, #4C4C4C);
+  background: var(--dark-500, #171717);
+  padding: 12px;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 2;
+}
+
+.popoverItem {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.modalBanUser {
+  padding: 12px 24px;
+  width: 378px;
+
+  & p {
+    margin-bottom: 18px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+}
+
+.errorMessage {
+  position: absolute;
+  bottom: 33%;
+  left: 24px;
+  color: var(--danger-500);
+  font-size: 14px;
+  margin-top: 10px;
+}

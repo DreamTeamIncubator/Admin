@@ -1,14 +1,14 @@
-import {BAN_USER, GET_USERS, REMOVE_USER} from '@/apollo/graphQL.ts'
-import {NetworkStatus, useMutation, useQuery} from '@apollo/client'
-import {ChangeEvent, useCallback, useState} from 'react'
+import {GET_USERS} from '@/apollo/graphQL.ts'
+import {NetworkStatus, useQuery} from '@apollo/client'
+import {ChangeEvent, useState} from 'react'
 import {Input} from '@/components/Input/Input.tsx'
 import {RadixSelect} from '@/components/Select/RadixSelect.tsx'
-import s from './UserList.module.scss'
-import {Pagination} from '@/components/Pagination/Pagination.tsx'
 import type {User} from '@/generated/graphql.ts'
 import {useDebounce} from '@/common/hooks/useDebounce.ts'
 import {LoadingBar} from '@/components/LoadingBar/LoadingBar.tsx';
-import {UserListItem} from '@/components/UserList/UserListItem/UserListItem.tsx';
+import {UserListItem} from '@/features/UserList/UserListItem/UserListItem.tsx';
+import s from './UserList.module.scss'
+import {Pagination} from '@/components/Pagination/Pagination.tsx';
 
 const selectOptions = [
     {value: 'Blocked', label: 'Blocked'},
@@ -35,10 +35,6 @@ export const UserList = () => {
         notifyOnNetworkStatusChange: true,
     });
 
-    const [removeUser] = useMutation(REMOVE_USER, {
-        onCompleted: () => refetch(),
-    });
-
     //debounce
     const debouncedSearch = useDebounce((value: string) => {
         refetch({
@@ -47,28 +43,6 @@ export const UserList = () => {
             pageSize: perPage,
         })
     }, 3000)
-
-    const [banUser] = useMutation(BAN_USER, {
-        onCompleted: () => refetch(),
-    });
-
-    const onDeleteHandler = useCallback(async (userId: number) => {
-        try {
-            await removeUser({variables: {userId}});
-            await removeUser({variables: {userId}});
-        } catch (e) {
-            console.error(e);
-        }
-    }, [removeUser]);
-
-    const onBanHandler = useCallback(async (userId: number, reason: string) => {
-        try {
-            await banUser({variables: {userId, banReason: reason}});
-        } catch (e) {
-            console.error(e);
-        }
-    }, [banUser]);
-
 
     const usersData = data?.getUsers || previousData?.getUsers;
     const totalCount = usersData?.pagination?.totalCount || usersData?.totalCount || 0;
@@ -110,10 +84,10 @@ export const UserList = () => {
         debouncedSearch(value);
     };
 
-    const onChangeSelectHandler = (value: any) => {
-        setSelectValue(value)
-        // Добавить логику фильтрации
-    }
+    // const onChangeSelectHandler = (value: any) => {
+    //     setSelectValue(value)
+    //     // Добавить логику фильтрации
+    // }
 
     const loading = networkStatus === NetworkStatus.loading && !data?.getUsers?.users;
 
@@ -147,10 +121,8 @@ export const UserList = () => {
                     <UserListItem
                         key={user.id}
                         user={user}
-                        onDelete={onDeleteHandler}
-                        onBan={onBanHandler}
+                        refetch={refetch}
                         isBanned={user.userBan}
-                        refetch ={refetch}
                     />
                 ))}
             </div>

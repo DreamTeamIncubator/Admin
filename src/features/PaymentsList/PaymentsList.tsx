@@ -2,13 +2,13 @@ import {GET_PAYMENTS} from '@/apollo/graphQL.ts'
 import { useQuery} from '@apollo/client'
 import {ChangeEvent, useState} from 'react'
 import {Input} from '@/components/Input/Input.tsx'
-import styles from './../../components/UserList/UserList.module.scss'
+// import styles from './../../components/UserList/UserList.module.scss'
+import styles from '../UserList/UserList.module.scss'
 import s from './PaymentsList.module.scss'
 import {Pagination} from '@/components/Pagination/Pagination.tsx'
 import {useDebounce} from '@/common/hooks/useDebounce.ts';
 import { SubscriptionPaymentsModel } from '@/generated/graphql'
 import { PaymentsListItem } from './PaymentsListItem/PaymentsListItem'
-
 
 type GetPaymentsQuery = {
   getPayments: {

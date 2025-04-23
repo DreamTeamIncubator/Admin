@@ -1,6 +1,6 @@
 import { SubscriptionPaymentsModel } from "@/generated/graphql"
 import s from './../PaymentsList.module.scss'
-import {formatDate} from '@/components/UserList/UserListItem/UserListItem.tsx';
+import {formatDate} from '@/utils/utils.ts';
 
 type Props = {
     user: SubscriptionPaymentsModel

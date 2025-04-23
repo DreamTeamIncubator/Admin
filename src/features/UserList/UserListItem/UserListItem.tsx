@@ -6,40 +6,38 @@ import banIcon from '@/assets/banUser.svg';
 import type {User, UserBan} from '@/generated/graphql.ts';
 import unbanIcon from '../../../assets/unban.svg';
 import {useState} from 'react';
-import {BanReasonForm} from '@/components/UserList/ActionModal/BanReasonForm/BanReasonForm.tsx';
-import {ActionModal} from '@/components/UserList/ActionModal/ActionModal.tsx';
 import { useNavigate } from 'react-router-dom';
-import {UNBAN_USER} from '@/apollo/graphQL.ts';
 import {useMutation} from '@apollo/client';
-
-export const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
-};
+import {BAN_USER, REMOVE_USER, UNBAN_USER} from '@/apollo/graphQL.ts';
+import {formatDate} from '@/utils/utils.ts';
+import {BanReasonForm} from '@/features/UserList/ActionModal/BanReasonForm/BanReasonForm.tsx';
+import {ActionModal} from '@/features/UserList/ActionModal/ActionModal.tsx';
 
 type Props = {
     user: User
-    onDelete: (userId: number) => Promise<void>
-    onBan: (userId: number, reason: string) => Promise<void>
-    isBanned?: UserBan | null
     refetch: () => void
+    isBanned?: UserBan | null
 };
 
-export const UserListItem = ({user, onDelete, onBan, isBanned, refetch}: Props) => {
+export const UserListItem = ({user, refetch, isBanned}: Props) => {
     const [activeModal, setActiveModal] = useState<'delete' | 'ban' | 'unban' | null>(null);
     const [banReason, setBanReason] = useState('');
     const [customBanReason, setCustomBanReason] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const [unban] = useMutation(UNBAN_USER)
-
     const route = useNavigate();
     const handleMoreInformation = (id: number) => {
         route(`/moreInformation/${id}`);
     };
 
-    console.log('userListItem render')
+    const [banUser] = useMutation(BAN_USER, {
+        onCompleted: () => refetch()
+    })
+    const [unban] = useMutation(UNBAN_USER)
+    const [removeUser] = useMutation(REMOVE_USER, {
+        onCompleted: () => refetch()
+    })
 
     const handleBanReasonChange = (value: string) => {
         setBanReason(value)
@@ -55,16 +53,14 @@ export const UserListItem = ({user, onDelete, onBan, isBanned, refetch}: Props) 
             setErrorMessage('Please select or enter a ban reason.');
             return;
         }
-
         setErrorMessage('');
-
         setIsLoading(true);
         try {
             if (actionType === 'delete') {
-                await onDelete(user.id);
+                await removeUser({variables: {userId: user.id}});
             } else if (actionType === 'ban') {
                 const reason = banReason === 'Another reason' ? customBanReason : banReason;
-                await onBan(user.id, reason);
+                await banUser({variables: {userId: user.id, banReason: reason}})
             } else if (actionType === 'unban') {
                 await  unban({
                     variables: {
@@ -154,40 +150,3 @@ export const UserListItem = ({user, onDelete, onBan, isBanned, refetch}: Props) 
             )}
         </div>
     )}
-
-// const _UserListItem = ({ user, onDelete }: Props) => {
-//   const route = useNavigate();
-//   const handleMoreInformation = (id: number) => {
-//     route(`/moreInformation/${id}`);
-//   };
-//   return (
-//     <div className={s.user} key={user.id}>
-//       <div className={s.userId}>{user.id}</div>
-//       <div className={s.userName}>{user.userName}</div>
-//       <div className={s.profileLink}>{user.profile.userName}</div>
-//       <div className={s.dateAdded}>{formatDate(user.profile.createdAt)}</div>
-//       <div>
-//         <Popover.Root>
-//           <Popover.Trigger asChild>
-//             <img src={dotsIcon} alt={'banIcon'} className={s.dotsIcon} />
-//           </Popover.Trigger>
-//
-//           <Popover.Content className={s.popoverContainer}>
-//             <div className={s.popoverItem} onClick={() => onDelete(user.id)}>
-//               <img src={deleteIcon} alt={'deleteIcon'} />
-//               <span>Delete User</span>
-//             </div>
-//             <div className={s.popoverItem} onClick={() => {}}>
-//               <img src={banIcon} alt={'banIcon'} />
-//               <span>Ban in the system</span>
-//             </div>
-//             <div className={s.popoverItem} onClick={() => handleMoreInformation(user.id)}>
-//               <img src={dotsIcon} alt={'banIcon'} />
-//               <span>More Information</span>
-//             </div>
-//           </Popover.Content>
-//         </Popover.Root>
-//       </div>
-//     </div>
-//   );
-// };

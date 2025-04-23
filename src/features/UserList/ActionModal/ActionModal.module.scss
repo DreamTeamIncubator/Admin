@@ -1,0 +1,13 @@
+.description {
+  margin-bottom: 20px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+
+  & button {
+    min-width: 130px;
+  }
+}
