@@ -1,21 +1,18 @@
-import { GET_USERS, REMOVE_USER } from '@/apollo/graphQL.ts'
-import { useMutation, useQuery } from '@apollo/client'
-import { ChangeEvent, useState } from 'react'
-import { Input } from '@/components/Input/Input.tsx'
-import { RadixSelect } from '@/components/Select/RadixSelect.tsx'
+import {BAN_USER, GET_USERS, REMOVE_USER} from '@/apollo/graphQL.ts'
+import {NetworkStatus, useMutation, useQuery} from '@apollo/client'
+import {ChangeEvent, useCallback, useState} from 'react'
+import {Input} from '@/components/Input/Input.tsx'
+import {RadixSelect} from '@/components/Select/RadixSelect.tsx'
 import s from './UserList.module.scss'
-import { Pagination } from '@/components/Pagination/Pagination.tsx'
-import { useBoolean } from '@/common/hooks/useBoolean.ts'
-import { ModalRadix } from '@/components/Modal/ModalRadix.tsx'
-import { Button } from '@/components/Button/Button.tsx'
-import type { User } from '@/generated/graphql.ts'
-import UserListItem from '@/components/UserList/UserListItem/UserListItem.tsx'
+import {Pagination} from '@/components/Pagination/Pagination.tsx'
+import type {User} from '@/generated/graphql.ts'
+import {useDebounce} from '@/common/hooks/useDebounce.ts'
+import {LoadingBar} from '@/components/LoadingBar/LoadingBar.tsx';
+import {UserListItem} from '@/components/UserList/UserListItem/UserListItem.tsx';
 
-import { useDebounce } from '@/common/hooks/useDebounce.ts'
-import { SortIcon } from '../SortIcon/SortIcon'
 const selectOptions = [
-  { value: 'Blocked', label: 'Blocked' },
-  { value: 'Not Blocked', label: 'Not Blocked' },
+    {value: 'Blocked', label: 'Blocked'},
+    {value: 'Not Blocked', label: 'Not Blocked'},
 ]
 
 export const UserList = () => {
@@ -25,11 +22,7 @@ export const UserList = () => {
     const [perPage, setPerPage] = useState(8);
     const perPageOptions = [8, 16, 32, 64, 128];
 
-  const { value: isOpenModal, setTrue: setIsOpened, setFalse: setIsClosed } = useBoolean()
-  const [user, setUser] = useState<User | null>(null)
-  const { value: isDisabled, setTrue: setIsDisabled, setFalse: setIsNotDisabled } = useBoolean()
-
-    const {data, refetch, previousData, networkStatus } = useQuery(GET_USERS, {
+    const {data, refetch, previousData, networkStatus , variables} = useQuery(GET_USERS, {
         variables: {
             searchTerm: inputValue,
             pageSize: perPage,
@@ -45,49 +38,31 @@ export const UserList = () => {
     const [removeUser] = useMutation(REMOVE_USER, {
         onCompleted: () => refetch(),
     });
-  const { data, refetch, variables } = useQuery(GET_USERS, {
-    variables: {
-      searchTerm: inputValue,
-      pageSize: perPage,
-      pageNumber: page,
-      sortBy: 'createdAt',
-      sortDirection: 'desc',
-      statusFilter: 'ALL',
-    },
-  })
 
-  //debounce
-  const debouncedSearch = useDebounce((value: string) => {
-    refetch({
-      searchTerm: value,
-      pageNumber: 1,
-      pageSize: perPage,
-    })
-  }, 3000)
-    const [banUser] = useMutation(BAN_USER, {
-        onCompleted: () => refetch(),
-    });
-
+    //debounce
     const debouncedSearch = useDebounce((value: string) => {
         refetch({
             searchTerm: value,
             pageNumber: 1,
-            pageSize: perPage
-        });
-    }, 300);
+            pageSize: perPage,
+        })
+    }, 3000)
+
+    const [banUser] = useMutation(BAN_USER, {
+        onCompleted: () => refetch(),
+    });
 
     const onDeleteHandler = useCallback(async (userId: number) => {
         try {
-            await removeUser({ variables: { userId } });
+            await removeUser({variables: {userId}});
         } catch (e) {
             console.error(e);
         }
     }, [removeUser]);
 
-  const [removeUser] = useMutation(REMOVE_USER)
     const onBanHandler = useCallback(async (userId: number, reason: string) => {
         try {
-            await banUser({ variables: { userId, banReason: reason } });
+            await banUser({variables: {userId, banReason: reason}});
         } catch (e) {
             console.error(e);
         }
@@ -115,26 +90,18 @@ export const UserList = () => {
             pageSize: newPerPage
         });
     };
-  const handlePerPageChange = (newPerPage: number) => {
-    setPerPage(newPerPage)
-    setPage(1)
-    refetch({
-      pageNumber: 1,
-      pageSize: newPerPage,
-    })
-  }
 
-  const handleSortBy = (sortBy: string) => {
-    const newDirection =
-      variables?.sortBy === sortBy ? (variables.sortDirection === 'asc' ? 'desc' : 'asc') : 'asc'
+    const handleSortBy = (sortBy: string) => {
+        const newDirection =
+            variables?.sortBy === sortBy ? (variables.sortDirection === 'asc' ? 'desc' : 'asc') : 'asc'
 
-    refetch({
-      ...variables,
-      sortBy,
-      sortDirection: newDirection,
-      pageNumber: 1,
-    })
-  }
+        refetch({
+            ...variables,
+            sortBy,
+            sortDirection: newDirection,
+            pageNumber: 1,
+        })
+    }
 
     const onChangeInputHandler = (value: string) => {
         setInputValue(value);
@@ -143,9 +110,9 @@ export const UserList = () => {
     };
 
     const onChangeSelectHandler = (value: any) => {
-        setSelectValue(value);
+        setSelectValue(value)
         // Добавить логику фильтрации
-    };
+    }
 
     const loading = networkStatus === NetworkStatus.loading && !data?.getUsers?.users;
 
@@ -163,7 +130,7 @@ export const UserList = () => {
                     triggerClassName={s.selectTrigger}
                     options={selectOptions}
                     value={selectValue.value}
-                    onValueChange={(value) => onChangeSelectHandler(value)}
+                    onValueChange={(value) => handleSortBy(value)}
                 />
             </div>
             <div className={s.headerContainer}>
@@ -174,7 +141,7 @@ export const UserList = () => {
                 <div>Actions</div>
             </div>
             <div className={s.userList}>
-                {loading && <div className={s.overlay}><LoadingBar /></div>}
+                {loading && <div className={s.overlay}><LoadingBar/></div>}
                 {users.map((user: User) => (
                     <UserListItem
                         key={user.id}
