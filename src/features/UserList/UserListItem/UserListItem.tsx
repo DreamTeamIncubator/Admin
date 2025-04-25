@@ -75,6 +75,12 @@ export const UserListItem = ({user, refetch, isBanned}: Props) => {
         }
     };
 
+    const onCloseModalHandler = () => {
+        setActiveModal(null)
+        setBanReason('')
+        setCustomBanReason('')
+    }
+
     const modalContent = {
         delete: {
             title: 'Delete user',
@@ -83,9 +89,9 @@ export const UserListItem = ({user, refetch, isBanned}: Props) => {
             )
         },
         ban: {
-            title: isBanned ? 'Un-ban user' : 'Ban user',
+            title: 'Ban user',
             description: (
-                <p>Are you sure to {isBanned ? 'un-ban' : 'ban'} user <b>{user.userName}</b>?</p>
+                <p>Are you sure to ban user <b>{user.userName}</b>?</p>
             ),
             formFields: !isBanned && (
                 <>
@@ -142,7 +148,7 @@ export const UserListItem = ({user, refetch, isBanned}: Props) => {
             {activeModal && (
                 <ActionModal
                     isOpen={!!activeModal}
-                    onClose={() => setActiveModal(null)}
+                    onClose={onCloseModalHandler}
                     onConfirm={() => handleActionConfirm(activeModal)}
                     content={modalContent[activeModal]}
                     isLoading={isLoading}

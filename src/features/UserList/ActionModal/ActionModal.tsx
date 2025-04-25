@@ -26,8 +26,6 @@ export const ActionModal = (
         isLoading = false
     }: Props) => {
 
-    console.log('Modal render')
-
     return (
         <ModalRadix open={isOpen} onClose={onClose} modalTitle={content.title}>
             <div className={s.description}>{content.description}</div>
