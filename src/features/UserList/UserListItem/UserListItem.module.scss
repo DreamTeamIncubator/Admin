@@ -1,20 +1,16 @@
 .user {
-  display: flex;
-  padding: 12px 24px;
+  display: grid;
+  grid-template-columns: minmax(14%, 1fr) minmax(22%, 2fr) minmax(22%, 2fr) minmax(18%, 2fr) minmax(14%, 0.5fr);
   align-items: center;
-
-  & div {
-    text-align: left;
-  }
+  //gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+  color: #ccc;
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--dark-500);
   }
-}
-
-.userName {
-  min-width: 160px;
-  margin-right: 53px;
 }
 
 .userId {
@@ -23,23 +19,15 @@
   align-items: center;
   justify-content: right;
   text-align: left;
-  min-width: 80px;
-  margin-right: 54px;
 
   & img {
     width: 24px;
   }
 }
 
-.profileLink {
-  min-width: 160px;
-  margin-right: 101px;
-}
-
-.dateAdded {
-  min-width: 100px;
-  margin-right: 141px;
-}
+//.userName {
+//
+//}
 
 .dotsIcon {
   padding: 5px;

@@ -2,12 +2,7 @@ import { useState, useEffect } from 'react';
 import { RadixSelect } from '@/components/Select/RadixSelect.tsx';
 import { TextArea } from '@/components/Textarea/TextArea.tsx';
 import s from './BanReasonForm.module.scss';
-
-const banReasons = [
-    { value: 'Bad behavior', label: 'Bad behavior' },
-    { value: 'Advertising placement', label: 'Advertising placement' },
-    { value: 'Another reason', label: 'Another reason' },
-];
+import {useTranslation} from 'react-i18next';
 
 type Props = {
     reason: string;
@@ -23,7 +18,16 @@ export const BanReasonForm = (
         customReason,
         onCustomReasonChange
     }: Props) => {
+
     const [showCustomReason, setShowCustomReason] = useState(reason === 'Another reason');
+    const { t } = useTranslation();
+
+    const banReasons = [
+        { value: 'Bad behavior', label: t('usersList.modal.ban.reasonSelect.options.behavior') },
+        { value: 'Advertising placement', label: t('usersList.modal.ban.reasonSelect.options.advertising') },
+        { value: 'Another reason', label: t('usersList.modal.ban.reasonSelect.options.another') },
+    ];
+
 
     useEffect(() => {
         setShowCustomReason(reason === 'Another reason');
@@ -43,7 +47,7 @@ export const BanReasonForm = (
                     options={banReasons}
                     onValueChange={reasonChangeHandler}
                     value={reason}
-                    placeholder="Select reason"
+                    placeholder={t('usersList.modal.ban.reasonSelect.placeholder')}
                 />
             </div>
             <div className={`${s['textarea-animator']} ${showCustomReason ? s.visible : ''}`}>
@@ -52,7 +56,7 @@ export const BanReasonForm = (
                         value={customReason}
                         onChange={(e) => onCustomReasonChange(e.currentTarget.value)}
                         className={s.textarea}
-                        placeholder="Enter custom reason"
+                        placeholder={t('usersList.modal.ban.textarea.placeholder')}
                     />
                 )}
             </div>

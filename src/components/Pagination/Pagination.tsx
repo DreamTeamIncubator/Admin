@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import KeyboardArrowLeft from '@/components/Pagination/keyboardArrows/KeyboardArrowLeft.tsx';
 import KeyboardArrowRight from '@/components/Pagination/keyboardArrows/KeyboardArrowRight.tsx';
 import {RadixSelect} from '@/components/Select/RadixSelect.tsx';
+import {useTranslation} from 'react-i18next';
 
 type PaginationConditionals =
   | {
@@ -201,6 +202,8 @@ export const PerPageSelect: FC<PerPageSelectProps> = ({
   perPage,
   perPageOptions,
 }) => {
+
+  const { t } = useTranslation();
   const selectOptions = perPageOptions.map((value) => ({
     label: String(value),
     value: String(value),
@@ -208,7 +211,7 @@ export const PerPageSelect: FC<PerPageSelectProps> = ({
 
   return (
     <div className={classNames.selectBox}>
-      Show
+      {t('pagination.show')}
       <RadixSelect
         className={s.paginationSelect}
         contentClassName={s.customDropdown}
@@ -216,7 +219,7 @@ export const PerPageSelect: FC<PerPageSelectProps> = ({
         options={selectOptions}
         value={String(perPage)}
       />
-      on page
+      {t('pagination.onPage')}
     </div>
   );
 };

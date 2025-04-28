@@ -12,6 +12,7 @@ import {BAN_USER, REMOVE_USER, UNBAN_USER} from '@/apollo/graphQL.ts';
 import {formatDate} from '@/utils/utils.ts';
 import {BanReasonForm} from '@/features/UserList/ActionModal/BanReasonForm/BanReasonForm.tsx';
 import {ActionModal} from '@/features/UserList/ActionModal/ActionModal.tsx';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
     user: User
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export const UserListItem = ({user, refetch, isBanned}: Props) => {
+    const { t } = useTranslation();
     const [activeModal, setActiveModal] = useState<'delete' | 'ban' | 'unban' | null>(null);
     const [banReason, setBanReason] = useState('');
     const [customBanReason, setCustomBanReason] = useState('');
@@ -83,15 +85,15 @@ export const UserListItem = ({user, refetch, isBanned}: Props) => {
 
     const modalContent = {
         delete: {
-            title: 'Delete user',
+            title: t('usersList.modal.delete.title'),
             description: (
-                <p>Are you sure to delete user <b>{user.userName}</b>?</p>
+                <p>{t('usersList.modal.delete.description')} <b>{user.userName}</b>?</p>
             )
         },
         ban: {
-            title: 'Ban user',
+            title: t('usersList.modal.ban.title'),
             description: (
-                <p>Are you sure to ban user <b>{user.userName}</b>?</p>
+                <p>{t('usersList.modal.ban.description')} <b>{user.userName}</b>?</p>
             ),
             formFields: !isBanned && (
                 <>
@@ -107,9 +109,9 @@ export const UserListItem = ({user, refetch, isBanned}: Props) => {
             ),
         },
         unban: {
-            title: 'Un-ban user',
+            title: t('usersList.modal.unban.title'),
             description: (
-                <p>Are you sure to un-ban user <b>{user.userName}</b>?</p>
+                <p>{t('usersList.modal.unban.description')} <b>{user.userName}</b>?</p>
             )
         },
     };
@@ -131,15 +133,15 @@ export const UserListItem = ({user, refetch, isBanned}: Props) => {
                     <Popover.Content className={s.popoverContainer}>
                         <div className={s.popoverItem} onClick={() => setActiveModal('delete')}>
                             <img src={deleteIcon} alt="Delete"/>
-                            <span>Delete User</span>
+                            <span>{t('usersList.popover.delete')}</span>
                         </div>
                         <div className={s.popoverItem} onClick={() => isBanned ? setActiveModal('unban') : setActiveModal('ban')}>
                             <img src={isBanned ? unbanIcon : banIcon} alt="Ban"/>
-                            <span>{isBanned ? 'Un-ban' : 'Ban'} User</span>
+                            <span>{isBanned ? t('usersList.popover.unban') : t('usersList.popover.ban')}</span>
                         </div>
                         <div className={s.popoverItem} onClick={() => handleMoreInformation(user.id)}>
                             <img src={dotsIcon} alt={'banIcon'}/>
-                            <span>More Information</span>
+                            <span>{t('usersList.popover.moreInformation')}</span>
                         </div>
                     </Popover.Content>
                 </Popover.Root>

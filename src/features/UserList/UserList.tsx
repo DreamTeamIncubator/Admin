@@ -10,14 +10,17 @@ import {UserListItem} from '@/features/UserList/UserListItem/UserListItem.tsx'
 import s from './UserList.module.scss'
 import {Pagination} from '@/components/Pagination/Pagination.tsx'
 import {SortIcon} from '@/components/SortIcon/SortIcon'
-
-const selectOptions = [
-    {value: 'ALL', label: 'All'},
-    {value: 'BLOCKED', label: 'Blocked'},
-    {value: 'UNBLOCKED', label: 'Not Blocked'},
-]
+import {useTranslation} from 'react-i18next';
 
 export const UserList = () => {
+    const { t } = useTranslation();
+
+    const selectOptions = [
+        {value: 'ALL', label: t('usersList.select.all')},
+        {value: 'BLOCKED', label: t('usersList.select.blocked')},
+        {value: 'UNBLOCKED', label: t('usersList.select.notBlocked')},
+    ]
+
     const [inputValue, setInputValue] = useState('')
     const [selectValue, setSelectValue] = useState(selectOptions[0])
     const [page, setPage] = useState(1)
@@ -112,7 +115,7 @@ export const UserList = () => {
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         onChangeInputHandler(e.currentTarget.value)
                     }
-                    placeholder={'Search'}
+                    placeholder={t('usersList.input.placeholder')}
                 />
                 <RadixSelect
                     className={s.selectFilter}
@@ -124,30 +127,30 @@ export const UserList = () => {
                 />
             </div>
             <div className={s.headerContainer}>
-                <div>User ID</div>
+                <div>{t('usersList.table.userId')}</div>
                 <div>
-                    Username{' '}
+                    {t('usersList.table.username')}{' '}
                     <SortIcon
                         active={variables?.sortBy === 'userName'}
                         direction={variables?.sortDirection}
                         onClick={() => handleSortBy('userName')}
                     />
                 </div>
-                <div>Profile link</div>
+                <div>{t('usersList.table.profileLink')}</div>
                 <div>
                     {' '}
-                    Date added{' '}
+                    {t('usersList.table.dateAdded')}{' '}
                     <SortIcon
                         active={variables?.sortBy === 'createdAt'}
                         direction={variables?.sortDirection}
                         onClick={() => handleSortBy('createdAt')}
                     />
                 </div>
-                <div>Actions</div>
+                <div>{t('usersList.table.actions')}</div>
             </div>
             <div className={s.userList}>
                 {loading && (
-                    <div className={s.overlay}>
+                    <div className={s.loadingBar}>
                         <LoadingBar/>
                     </div>
                 )}
