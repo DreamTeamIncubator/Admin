@@ -9,6 +9,7 @@ import {Pagination} from '@/components/Pagination/Pagination.tsx'
 import {useDebounce} from '@/common/hooks/useDebounce.ts';
 import { SubscriptionPaymentsModel } from '@/generated/graphql'
 import { PaymentsListItem } from './PaymentsListItem/PaymentsListItem'
+import {useTranslation} from 'react-i18next';
 
 type GetPaymentsQuery = {
   getPayments: {
@@ -36,6 +37,7 @@ export const PaymentsList = () => {
     const perPageOptions = [6]
     const [sortBy, setSortBy] = useState<string>('createdAt')
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
+    const { t } = useTranslation()
 
 
     const { data, refetch } = useQuery<GetPaymentsQuery, GetPaymentsQueryVariables>(GET_PAYMENTS, {
@@ -115,24 +117,24 @@ export const PaymentsList = () => {
             </div>
             <div className={s.headerContainer}>
                 <div className={s.iconFilterWrapper}>
-                    Username 
+                    {t('paymentsList.username')}
                     <img src={'/Filter.svg'} onClick={()=>handleSort('userName')}/>
                 </div>
 
                 <div className={s.iconFilterWrapper}  onClick={()=>handleSort('createdAt')}>
-                    Date added
+                    {t('paymentsList.dateAdded')}
                     <img src={'/Filter.svg'}/>
                 </div>
 
                 <div className={s.iconFilterWrapper}>
-                    Amount,$
+                    {t('paymentsList.amount')},$
                     <img src={'/Filter.svg'} onClick={()=>handleSort('amount')}/>
                 </div>
 
-                <div>Subscription</div>
+                <div>{t('paymentsList.subscription')}</div>
 
                 <div className={s.iconFilterWrapper}>
-                    Payment method
+                    {t('paymentsList.paymentMethod')}
                     <img src={'/Filter.svg'} onClick={()=>handleSort('paymentMethod')}/>
                 </div>
             </div>

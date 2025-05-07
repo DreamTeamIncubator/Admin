@@ -2,6 +2,7 @@ import {ModalRadix} from '@/components/Modal/ModalRadix.tsx';
 import {Button} from '@/components/Button/Button.tsx';
 import React from 'react';
 import s from './ActionModal.module.scss';
+import {useTranslation} from 'react-i18next';
 
 type ModalContent = {
     title: string
@@ -25,6 +26,7 @@ export const ActionModal = (
         content,
         isLoading = false
     }: Props) => {
+    const { t } = useTranslation();
 
     return (
         <ModalRadix open={isOpen} onClose={onClose} modalTitle={content.title}>
@@ -35,13 +37,13 @@ export const ActionModal = (
                     variant="primary"
                     onClick={onClose}
                     disabled={isLoading}
-                >No
+                >{t('common.button.cancel')}
                 </Button>
                 <Button
                     variant="outlined"
                     onClick={onConfirm}
                     disabled={isLoading}
-                >Yes
+                >{t('common.button.confirm')}
                 </Button>
             </div>
         </ModalRadix>
