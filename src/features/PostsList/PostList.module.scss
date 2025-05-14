@@ -1,0 +1,31 @@
+
+.container {
+  padding: 60px 20px 20px;
+
+  input {
+    margin-bottom: 40px;
+  }
+
+  .postsWrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+.modal {
+
+  .text {
+    margin-bottom: 20px;
+  }
+
+  .buttonWrap {
+    display: flex;
+    justify-content: space-between;
+
+    .button {
+      max-width: 130px;
+      margin: 20px 0;
+    }
+  }
+}

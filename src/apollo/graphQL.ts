@@ -197,3 +197,64 @@ export const GET_PAYMENTS = gql`
     }
   }
 `
+export const GET_POSTS = gql`
+    query getPosts(
+        $endCursorPostId: Int
+        $searchTerm: String
+        $pageSize: Int = 10
+        $sortBy: String = "createdAt"
+        $sortDirection: SortDirection = desc
+    ) {
+      getPosts(
+            endCursorPostId: $endCursorPostId
+            searchTerm: $searchTerm
+            pageSize: $pageSize
+            sortBy: $sortBy
+            sortDirection: $sortDirection
+        ) {
+          items {
+          images {
+            url
+          }
+          id
+          ownerId
+          description
+          createdAt
+          updatedAt
+          postOwner {
+            userName
+            avatars {
+              url
+            }
+          }
+          userBan {
+            reason
+          }
+          }
+        }
+    }
+`
+
+
+export const POST_ADDED = gql`
+    subscription postAdded {
+        postAdded {
+            images {
+                url
+            }
+            id
+            description
+            createdAt
+            updatedAt
+            postOwner {
+                userName
+                avatars {
+                    url
+                }
+            }
+            userBan {
+              reason
+            }
+         }
+    }
+`
