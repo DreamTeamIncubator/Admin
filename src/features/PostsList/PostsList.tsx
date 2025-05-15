@@ -30,23 +30,23 @@ export const PostsList = () => {
         onCompleted: () => refetch()
     })
 
-    // const {data: newPost,} = useSubscription(POST_ADDED, {
-    //     onSubscriptionData: ({subscriptionData}) => {
-    //         console.log('subscriptionData', subscriptionData);
-    //         const newPost = subscriptionData.data?.postAdded;
-    //         if (newPost) {
-    //             refetch();
-    //         }
-    //     },
-    // });
-    const {data: newPost} = useSubscription(POST_ADDED, {
-        onData: ({data}) => {
-            const newPost = data?.data?.postAdded;
+    const {data: newPost,} = useSubscription(POST_ADDED, {
+        onSubscriptionData: ({subscriptionData}) => {
+            console.log('subscriptionData', subscriptionData);
+            const newPost = subscriptionData.data?.postAdded;
             if (newPost) {
                 refetch();
             }
         },
     });
+    // const {data: newPost} = useSubscription(POST_ADDED, {
+    //     onData: ({data}) => {
+    //         const newPost = data?.data?.postAdded;
+    //         if (newPost) {
+    //             refetch();
+    //         }
+    //     },
+    // });
 
 
     const posts = data?.getPosts?.items || [];
